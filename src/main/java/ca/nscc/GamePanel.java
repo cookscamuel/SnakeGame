@@ -15,18 +15,15 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
     static final int DELAY = 75;
-    final int x[] = new int[GAME_UNITS];
-    final int y[] = new int[GAME_UNITS];
-    int bodyParts = 6;
-    int applesEaten;
-    int appleX;
-    int appleY;
-    int poisonX;
-    int poisonY;
+    static final int[] x = new int[GAME_UNITS];
+    static final int[] y = new int[GAME_UNITS];
+    static int bodyParts = 6;
+    static int applesEaten;
     char direction = 'R';
-    boolean running = false;
+    static boolean running = false;
     Timer timer;
-    Random random;
+    static Random random;
+
 
     GamePanel() {
         random = new Random();
@@ -38,8 +35,9 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void startGame() {
-        newApple();
-        newPoison();
+        Apple.createNew();
+        PoisonApple.createNew();
+        Obstacle.createNew();
         running = true;
         timer = new Timer(DELAY, this);
         timer.start();
@@ -58,10 +56,13 @@ public class GamePanel extends JPanel implements ActionListener {
             }
 
             g.setColor(Color.red);
-            g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+            g.fillOval(Apple.appleX, Apple.appleY, UNIT_SIZE, UNIT_SIZE);
 
             g.setColor(Color.MAGENTA);
-            g.fillOval(poisonX, poisonY, UNIT_SIZE, UNIT_SIZE);
+            g.fillOval(PoisonApple.poisonX, PoisonApple.poisonY, UNIT_SIZE, UNIT_SIZE);
+
+            g.setColor(Color.WHITE);
+            g.fillRect(Obstacle.obX, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
 
             for (int i = 0; i < bodyParts; i++) {
                 if (i == 0) {
@@ -80,26 +81,10 @@ public class GamePanel extends JPanel implements ActionListener {
         }
         else {
             gameOver(g);
+            // WRITE SCORE TO FILE HERE ////////////////////////////////////////////////
         }
     }
 
-    public void newApple() {
-        appleX = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
-        appleY = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
-    }
-
-    public void newPoison() {
-        poisonX = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
-        poisonY = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
-        if (poisonX == appleX && poisonY == appleY) {
-            poisonX = SCREEN_WIDTH/UNIT_SIZE + SCREEN_WIDTH/2;
-            poisonY = SCREEN_HEIGHT/UNIT_SIZE + SCREEN_HEIGHT/2;
-            if (poisonX == appleX && poisonY == appleY) {
-                poisonX += UNIT_SIZE;
-                poisonY += UNIT_SIZE;
-            }
-        }
-    }
 
     public void move() {
         for (int i = bodyParts; i > 0; i--) {
@@ -122,21 +107,6 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
-
-    public void checkApple() {
-        if ((x[0] == appleX) && (y[0] == appleY)) {
-            bodyParts++;
-            applesEaten++;
-            newApple();
-            newPoison();
-        }
-    }
-
-    public void checkPoison() {
-        if ((x[0] == poisonX) && (y[0] == poisonY)) {
-            running = false;
-        }
-    }
 
     public void checkCollisions() {
         // Checks if the head touches the body.
@@ -189,8 +159,9 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (running) {
             move();
-            checkApple();
-            checkPoison();
+            Apple.detectCollision();
+            PoisonApple.detectCollision();
+            Obstacle.detectCollision();
             checkCollisions();
         }
         repaint();
@@ -223,6 +194,5 @@ public class GamePanel extends JPanel implements ActionListener {
                     break;
             }
         }
-
     }
 }
