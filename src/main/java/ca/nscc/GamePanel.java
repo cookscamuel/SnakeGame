@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
@@ -59,22 +58,11 @@ public class GamePanel extends JPanel implements ActionListener {
                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
             }
 
-            g.setColor(Color.red);
-            g.fillOval(Apple.appleX, Apple.appleY, UNIT_SIZE, UNIT_SIZE);
+            Apple.drawObject(g);
 
-            g.setColor(Color.MAGENTA);
-            g.fillOval(PoisonApple.poisonX, PoisonApple.poisonY, UNIT_SIZE, UNIT_SIZE);
+            PoisonApple.drawObject(g);
 
-            for (int i=0; i<applesEaten * 2; i++) {
-                g.setColor(Color.WHITE);
-                g.fillRect(Obstacle.obX + UNIT_SIZE, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
-                g.setColor(Color.WHITE);
-                g.fillRect(Obstacle.obX + UNIT_SIZE, Obstacle.obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
-                g.setColor(Color.WHITE);
-                g.fillRect(Obstacle.obX, Obstacle.obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
-                g.setColor(Color.WHITE);
-                g.fillRect(Obstacle.obX, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
-            }
+            Obstacle.drawObject(g);
 
             for (int i = 0; i < bodyParts; i++) {
                 if (i == 0) {

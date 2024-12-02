@@ -9,4 +9,8 @@ abstract class GameObjects {
     public void detectCollision() {
 
     }
+
+    public void drawObject() {
+
+    }
 }

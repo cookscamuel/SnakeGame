@@ -1,5 +1,7 @@
 package ca.nscc;
 
+import java.awt.*;
+
 public class PoisonApple extends GamePanel {
 
     static int poisonX;
@@ -18,6 +20,11 @@ public class PoisonApple extends GamePanel {
         if ((x[0] == PoisonApple.poisonX) && (y[0] == PoisonApple.poisonY)) {
             running = false;
         }
+    }
+
+    static void drawObject(Graphics g) {
+        g.setColor(Color.MAGENTA);
+        g.fillOval(PoisonApple.poisonX, PoisonApple.poisonY, UNIT_SIZE, UNIT_SIZE);
     }
 
 }
