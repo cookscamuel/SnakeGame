@@ -16,6 +16,7 @@ public class Apple extends GamePanel {
             applesEaten++;
             Apple.createNew();
             PoisonApple.createNew(); // I change the position of the apple every time an apple is eaten because it was boring to have it in the same spot the whole time.
+            Obstacle.createNew();
         }
     }
 

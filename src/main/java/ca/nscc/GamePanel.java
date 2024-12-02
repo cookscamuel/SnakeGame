@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
@@ -14,7 +15,7 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
-    static final int DELAY = 75;
+    static int DELAY = 100;
     static final int[] x = new int[GAME_UNITS];
     static final int[] y = new int[GAME_UNITS];
     static int bodyParts = 6;
@@ -23,6 +24,9 @@ public class GamePanel extends JPanel implements ActionListener {
     static boolean running = false;
     Timer timer;
     static Random random;
+    List obstaclesX = new List();
+    List obstaclesY = new List();
+
 
 
     GamePanel() {
@@ -61,8 +65,16 @@ public class GamePanel extends JPanel implements ActionListener {
             g.setColor(Color.MAGENTA);
             g.fillOval(PoisonApple.poisonX, PoisonApple.poisonY, UNIT_SIZE, UNIT_SIZE);
 
-            g.setColor(Color.WHITE);
-            g.fillRect(Obstacle.obX, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
+            for (int i=0; i<applesEaten * 2; i++) {
+                g.setColor(Color.WHITE);
+                g.fillRect(Obstacle.obX + UNIT_SIZE, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
+                g.setColor(Color.WHITE);
+                g.fillRect(Obstacle.obX + UNIT_SIZE, Obstacle.obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
+                g.setColor(Color.WHITE);
+                g.fillRect(Obstacle.obX, Obstacle.obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
+                g.setColor(Color.WHITE);
+                g.fillRect(Obstacle.obX, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
+            }
 
             for (int i = 0; i < bodyParts; i++) {
                 if (i == 0) {
@@ -122,7 +134,7 @@ public class GamePanel extends JPanel implements ActionListener {
         }
 
         // Check for right.
-        if (x[0] > SCREEN_WIDTH) {
+        if (x[0] > SCREEN_WIDTH - UNIT_SIZE) {
             running = false;
         }
 
@@ -132,7 +144,7 @@ public class GamePanel extends JPanel implements ActionListener {
         }
 
         // Check for top.
-        if (y[0] > SCREEN_HEIGHT) {
+        if (y[0] > SCREEN_HEIGHT - UNIT_SIZE) {
             running = false;
         }
 
