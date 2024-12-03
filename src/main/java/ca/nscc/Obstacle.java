@@ -20,7 +20,10 @@ public class Obstacle extends GameObjects {
     @Override
     public void detectCollision() {
         if (applesEaten >= 10) {
-            if (((x[0] == Obstacle.obX) && (y[0] == Obstacle.obY)) || ((x[0] == Obstacle.obX + UNIT_SIZE) && (y[0] == Obstacle.obY + UNIT_SIZE)) || ((x[0] == Obstacle.obX) && (y[0] == Obstacle.obY + UNIT_SIZE)) || ((x[0] == Obstacle.obX + UNIT_SIZE) && (y[0] == Obstacle.obY))) {
+            if (((x[0] == obX) && (y[0] == obY))
+                    || ((x[0] == obX + UNIT_SIZE) && (y[0] == obY + UNIT_SIZE))
+                    || ((x[0] == obX) && (y[0] == obY + UNIT_SIZE))
+                    || ((x[0] == obX + UNIT_SIZE) && (y[0] == obY))) {
                 running = false;
             }
         }
@@ -31,13 +34,13 @@ public class Obstacle extends GameObjects {
     public void drawObject(Graphics g) {
         if (applesEaten >= 10) {
             g.setColor(Color.WHITE);
-            g.fillRect(Obstacle.obX + UNIT_SIZE, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
+            g.fillRect(obX + UNIT_SIZE, obY, UNIT_SIZE, UNIT_SIZE);
             g.setColor(Color.WHITE);
-            g.fillRect(Obstacle.obX + UNIT_SIZE, Obstacle.obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
+            g.fillRect(obX + UNIT_SIZE, obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
             g.setColor(Color.WHITE);
-            g.fillRect(Obstacle.obX, Obstacle.obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
+            g.fillRect(obX, obY + UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
             g.setColor(Color.WHITE);
-            g.fillRect(Obstacle.obX, Obstacle.obY, UNIT_SIZE, UNIT_SIZE);
+            g.fillRect(obX, obY, UNIT_SIZE, UNIT_SIZE);
         }
     }
 

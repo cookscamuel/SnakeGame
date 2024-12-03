@@ -23,11 +23,6 @@ public class PoisonApple extends GameObjects {
                 running = false;
             }
         }
-
-        if (((poisonX == Obstacle.obX) && (poisonY == Obstacle.obY)) || ((poisonX == Obstacle.obX + UNIT_SIZE) && (poisonY == Obstacle.obY + UNIT_SIZE)) || ((poisonX == Obstacle.obX) && (poisonY == Obstacle.obY + UNIT_SIZE)) || ((poisonX == Obstacle.obX + UNIT_SIZE) && (poisonY == Obstacle.obY))) {
-            createNew();
-        }
-
     }
 
     @Override

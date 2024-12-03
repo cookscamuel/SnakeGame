@@ -22,10 +22,19 @@ public class Apple extends GameObjects {
             applesEaten++;
             createNew();
 
-            PoisonApple poisonApple = new PoisonApple();
             Obstacle obstacle = new Obstacle();
-            poisonApple.createNew();
+            PoisonApple poisonApple = new PoisonApple();
+
             obstacle.createNew();
+            poisonApple.createNew();
+
+            // Check to see if the poison apple was placed on top of the obstacle.
+            if (((poisonApple.poisonX == obstacle.obX) && (poisonApple.poisonY == obstacle.obY))
+                    || ((poisonApple.poisonX == obstacle.obX + UNIT_SIZE) && (poisonApple.poisonY == obstacle.obY + UNIT_SIZE))
+                    || ((poisonApple.poisonX == obstacle.obX) && (poisonApple.poisonY == obstacle.obY + UNIT_SIZE))
+                    || ((poisonApple.poisonX == obstacle.obX + UNIT_SIZE) && (poisonApple.poisonY == obstacle.obY))) {
+                poisonApple.createNew();
+            }
 
             // Check to see if an apple spawns on a poison apple and respawn it.
             if ((appleX == poisonApple.poisonX) && (appleY == poisonApple.poisonY)) {
