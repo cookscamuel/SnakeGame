@@ -1,16 +1,12 @@
 package ca.nscc;
 
+import java.awt.*;
+
 abstract class GameObjects {
 
-    public void createNew() {
+    public abstract void createNew();
 
-    }
+    public abstract void detectCollision();
 
-    public void detectCollision() {
-
-    }
-
-    public void drawObject() {
-
-    }
+    public abstract void drawObject(Graphics g);
 }

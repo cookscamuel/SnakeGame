@@ -2,29 +2,40 @@ package ca.nscc;
 
 import java.awt.*;
 
-public class PoisonApple extends GamePanel {
+import static ca.nscc.GamePanel.*;
+
+public class PoisonApple extends GameObjects {
 
     static int poisonX;
     static int poisonY;
 
-    static void createNew() {
-        poisonX = random.nextInt((SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
+    @Override
+    public void createNew() {
+        poisonX = random.nextInt(((SCREEN_WIDTH - UNIT_SIZE * 2)/UNIT_SIZE))*UNIT_SIZE;
         poisonY = random.nextInt((SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
-        if (poisonX == Apple.appleX && poisonY == Apple.appleY) {
-            poisonX += UNIT_SIZE;
-            poisonY += UNIT_SIZE;
-        }
+
     }
 
-    static void detectCollision() {
-        if ((x[0] == PoisonApple.poisonX) && (y[0] == PoisonApple.poisonY)) {
-            running = false;
+    @Override
+    public void detectCollision() {
+        if (applesEaten >= 5) {
+            if ((x[0] == poisonX) && (y[0] == poisonY)) {
+                running = false;
+            }
         }
+
+        if (((poisonX == Obstacle.obX) && (poisonY == Obstacle.obY)) || ((poisonX == Obstacle.obX + UNIT_SIZE) && (poisonY == Obstacle.obY + UNIT_SIZE)) || ((poisonX == Obstacle.obX) && (poisonY == Obstacle.obY + UNIT_SIZE)) || ((poisonX == Obstacle.obX + UNIT_SIZE) && (poisonY == Obstacle.obY))) {
+            createNew();
+        }
+
     }
 
-    static void drawObject(Graphics g) {
-        g.setColor(Color.MAGENTA);
-        g.fillOval(PoisonApple.poisonX, PoisonApple.poisonY, UNIT_SIZE, UNIT_SIZE);
+    @Override
+    public void drawObject(Graphics g) {
+        if (applesEaten >= 5) {
+            g.setColor(Color.MAGENTA);
+            g.fillOval(poisonX, poisonY, UNIT_SIZE, UNIT_SIZE);
+        }
     }
 
 }

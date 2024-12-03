@@ -6,41 +6,51 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
 
-    static final int SCREEN_WIDTH = 600;
     static final int SCREEN_HEIGHT = 600;
+    static int DRAW_HEIGHT = 600;
+    static int SCREEN_WIDTH = 600;
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
     static int DELAY = 100;
     static final int[] x = new int[GAME_UNITS];
     static final int[] y = new int[GAME_UNITS];
-    static int bodyParts = 6;
     static int applesEaten;
-    char direction = 'R';
     static boolean running = false;
     Timer timer;
     static Random random;
-    List obstaclesX = new List();
-    List obstaclesY = new List();
+    ArrayList<GameObjects> gameObjects;
+    static int bodyParts = 6;
+    char direction = 'R';
+    static int level = 1;
+    static String levelString = String.valueOf(level);
 
 
 
     GamePanel() {
         random = new Random();
+        gameObjects = new ArrayList<>(); // This list will track all game objects.
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        this.setBackground(Color.black);
+        this.setBackground(Color.red);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
         startGame();
     }
 
     public void startGame() {
-        Apple.createNew();
-        PoisonApple.createNew();
-        Obstacle.createNew();
+        Apple apple = new Apple();
+        PoisonApple poisonApple = new PoisonApple();
+        Obstacle obstacle = new Obstacle();
+        gameObjects.add(obstacle);
+        gameObjects.add(poisonApple);
+        gameObjects.add(apple);
+        poisonApple.createNew();
+        obstacle.createNew();
+        apple.createNew();
         running = true;
         timer = new Timer(DELAY, this);
         timer.start();
@@ -53,17 +63,24 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void draw(Graphics g) {
         if (running) {
-            for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+            for (int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++) {
+                g.setColor(new Color(0, 105, 35));
                 g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
+            }
+
+            for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
             }
 
-            Apple.drawObject(g);
 
-            PoisonApple.drawObject(g);
+            for (GameObjects object : gameObjects) {
+                object.drawObject(g);
+            }
 
-            Obstacle.drawObject(g);
-
+            // For each player, do this below.
             for (int i = 0; i < bodyParts; i++) {
                 if (i == 0) {
                     g.setColor(Color.GREEN);
@@ -73,10 +90,12 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
-            g.setColor(Color.RED);
+            g.setColor(Color.LIGHT_GRAY);
             g.setFont(new Font("Consolas", Font.BOLD, 40));
             FontMetrics metrics = getFontMetrics(g.getFont());
-            g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: " + applesEaten))/2, g.getFont().getSize());
+            g.drawString("Level " + levelString, (SCREEN_WIDTH - metrics.stringWidth("Level " + levelString))/2, UNIT_SIZE + 12);
+            g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: " + applesEaten))/2, SCREEN_HEIGHT - 12);
+
 
         }
         else {
@@ -138,30 +157,36 @@ public class GamePanel extends JPanel implements ActionListener {
 
         if (!running) {
             timer.stop();
+            SCREEN_WIDTH = 600;
         }
 
     }
 
     public void gameOver(Graphics g) {
         // Game Over screen.
-        g.setColor(Color.RED);
+        g.setColor(Color.BLACK);
         g.setFont(new Font("Consolas", Font.BOLD, 75));
         FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString("GAME OVER", (SCREEN_WIDTH - metrics.stringWidth("GAME OVER"))/2, SCREEN_HEIGHT/2);
+        g.drawString("GAME OVER", (SCREEN_WIDTH - metrics.stringWidth("GAME OVER"))/2, SCREEN_HEIGHT/3);
 
-        g.setColor(Color.RED);
+        g.setColor(Color.BLACK);
         g.setFont(new Font("Consolas", Font.BOLD, 50));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
-        g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics2.stringWidth("Score: " + applesEaten))/2, SCREEN_HEIGHT/2 + (UNIT_SIZE * 5));
+        g.drawString("Level " + levelString, (SCREEN_WIDTH - metrics2.stringWidth("Level " + levelString))/2, SCREEN_HEIGHT/2 - UNIT_SIZE);
+
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Consolas", Font.BOLD, 50));
+        FontMetrics metrics3 = getFontMetrics(g.getFont());
+        g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics3.stringWidth("Score: " + applesEaten))/2, SCREEN_HEIGHT/2 + UNIT_SIZE);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (running) {
             move();
-            Apple.detectCollision();
-            PoisonApple.detectCollision();
-            Obstacle.detectCollision();
+            for (GameObjects object : gameObjects) {
+                object.detectCollision();
+            }
             checkCollisions();
         }
         repaint();
@@ -192,6 +217,8 @@ public class GamePanel extends JPanel implements ActionListener {
                         direction = 'D';
                     }
                     break;
+                case KeyEvent.VK_W:
+                    running = false;
             }
         }
     }
