@@ -6,8 +6,8 @@ import static ca.nscc.GamePanel.*;
 
 public class Apple extends GameObjects {
 
-    static int appleX;
-    static int appleY;
+    int appleX;
+    int appleY;
 
     @Override
     public void createNew() {
@@ -74,7 +74,7 @@ public class Apple extends GameObjects {
     @Override
     public void drawObject(Graphics g) {
         g.setColor(Color.red);
-        g.fillOval(Apple.appleX, Apple.appleY, UNIT_SIZE, UNIT_SIZE);
+        g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
     }
 
 }

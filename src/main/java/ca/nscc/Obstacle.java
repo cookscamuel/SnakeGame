@@ -24,7 +24,7 @@ public class Obstacle extends GameObjects {
                     || ((x[0] == obX + UNIT_SIZE) && (y[0] == obY + UNIT_SIZE))
                     || ((x[0] == obX) && (y[0] == obY + UNIT_SIZE))
                     || ((x[0] == obX + UNIT_SIZE) && (y[0] == obY))) {
-                running = false;
+                running = 4;
             }
         }
 

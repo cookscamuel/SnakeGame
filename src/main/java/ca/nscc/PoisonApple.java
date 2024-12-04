@@ -20,7 +20,7 @@ public class PoisonApple extends GameObjects {
     public void detectCollision() {
         if (applesEaten >= 5) {
             if ((x[0] == poisonX) && (y[0] == poisonY)) {
-                running = false;
+                running = 4;
             }
         }
     }
@@ -28,7 +28,7 @@ public class PoisonApple extends GameObjects {
     @Override
     public void drawObject(Graphics g) {
         if (applesEaten >= 5) {
-            g.setColor(Color.MAGENTA);
+            g.setColor(new Color(168, 0, 0));
             g.fillOval(poisonX, poisonY, UNIT_SIZE, UNIT_SIZE);
         }
     }
