@@ -28,7 +28,7 @@ public class PoisonApple extends GameObjects {
     @Override
     public void drawObject(Graphics g) {
         if (applesEaten >= 5) {
-            g.setColor(new Color(168, 0, 0));
+            g.setColor(new Color(115, 0, 0));
             g.fillOval(poisonX, poisonY, UNIT_SIZE, UNIT_SIZE);
         }
     }

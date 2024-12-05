@@ -89,7 +89,6 @@ public class GamePanel extends JPanel implements ActionListener {
             nameReader.close();
             scoreReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
             e.printStackTrace();
         }
         startGame();
@@ -105,9 +104,8 @@ public class GamePanel extends JPanel implements ActionListener {
         bodyParts = 6;
         for (int i = 1; i < bodyParts; i++) { // The location I picked (-UNIT_SIZE) is meaningless, it's just off the screen.
             x[i] = -UNIT_SIZE;
-            y[i] = -UNIT_SIZE;
         }
-        x[0] = 0;
+        x[0] = SCREEN_WIDTH/2;
         y[0] = 0;
 
         Apple apple = new Apple();
@@ -221,6 +219,7 @@ public class GamePanel extends JPanel implements ActionListener {
             leaderboard(g);
         }
         else if (running == 4) {
+            gameOver(g);
             if (applesEaten != 0 && (applesEaten > highscores[0])) {
 
                 String name;
@@ -246,9 +245,7 @@ public class GamePanel extends JPanel implements ActionListener {
                     FileWriter myWriter = new FileWriter("scores.txt");
                     myWriter.write(name + " " + applesEaten);
                     myWriter.close();
-                    System.out.println("Successfully wrote to the file.");
                 } catch (IOException e) {
-                    System.out.println("An error occurred.");
                     e.printStackTrace();
                 }
                 try {
@@ -270,13 +267,11 @@ public class GamePanel extends JPanel implements ActionListener {
                         }
                     }
                     for (int i = 0; i < names.length; i++) {
-                        System.out.println(names[i] + " " + highscores[i]); // REMOVE THIS LATER
-                        topScores.put(highscores[i], names[i]); // Create key-value pairs of each score.
+                        topScores.put(highscores[i], names[i]); // refresh the list of scores.
                     }
                     nameReader.close();
                     scoreReader.close();
                 } catch (FileNotFoundException e) {
-                    System.out.println("File not found.");
                     e.printStackTrace();
                 }
             }
@@ -429,13 +424,11 @@ public class GamePanel extends JPanel implements ActionListener {
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
-                        System.out.println("Successfully erased all scores.");
                         for (int i = 0; i < highscores.length; i++) {
                             highscores[i] = 0;
                             names[i] = "";
                         }
                     }
-
             }
         }
     }
