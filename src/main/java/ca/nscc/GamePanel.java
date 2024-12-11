@@ -193,6 +193,13 @@ public class GamePanel extends JPanel implements ActionListener {
                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
             }
 
+            for (int i = 0; i < SCREEN_HEIGHT/UNIT_SIZE; i++) {
+                g.setColor(new Color(217, 234, 211)); // Gridline color
+                 g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);}
+                 for (int i = 0; i < SCREEN_WIDTH/UNIT_SIZE; i++){
+                     g.setColor(new Color(217, 234, 211)); // Gridline color
+                      g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
+                 }
 
             for (GameObjects object : gameObjects) {
                 object.drawObject(g);
@@ -222,19 +229,14 @@ public class GamePanel extends JPanel implements ActionListener {
             gameOver(g);
             if (applesEaten != 0 && (applesEaten > highscores[0])) {
 
-                String name;
-                do {
-                    name = JOptionPane.showInputDialog(
-                            null,
-                            "Enter name (3 letters): ",
-                            "New High Score!",
-                            JOptionPane.PLAIN_MESSAGE
-                    );
+                String name = "";
+                while (name.length() != 3) {
+                    name = JOptionPane.showInputDialog(null,"Enter name (3 letters): ","New High Score!", JOptionPane.PLAIN_MESSAGE);
                     if (name == null) { // Catches the user closing the dialogue box.
                         name = "???";
                     }
-                    name = name.trim().toUpperCase(); // Trim the user's entry and make it capitalized.
-                } while (name.length() != 3);
+                    name = name.toUpperCase(); // Make user entry capitalized.
+                }
 
                 // Cover up the remnants of the window.
                 g.setColor(Color.red);
@@ -371,22 +373,22 @@ public class GamePanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             switch(e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
-                    if (direction != 'R') {
+                    if (direction != 'R' && running == 2) {
                         direction = 'L';
                     }
                     break;
                 case KeyEvent.VK_RIGHT:
-                    if (direction != 'L') {
+                    if (direction != 'L' && running == 2) {
                         direction = 'R';
                     }
                     break;
                 case KeyEvent.VK_UP:
-                    if (direction != 'D') {
+                    if (direction != 'D' && running == 2) {
                         direction = 'U';
                     }
                     break;
                 case KeyEvent.VK_DOWN:
-                    if (direction != 'U') {
+                    if (direction != 'U' && running == 2) {
                         direction = 'D';
                     }
                     break;
